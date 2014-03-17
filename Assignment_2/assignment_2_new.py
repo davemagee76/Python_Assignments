@@ -33,14 +33,10 @@ mass_dict = {'H': 1, 'Cl': 35, 'Na': 23, 'C': 12, 'O': 16, 'S': 32, 'Mg': 24, 'C
 # the list of atoms, their respective number of atoms in the compound and their respective molecular weights
 
 
-def calc_mol_weight (a,b,c):
-    for element_1 in y1:
+def calc_mol_weight (a):
+    for field in element:
         molweight = mass_dict['Na']+mass_dict['Cl']
-        return(molweight)
-
-    '''for element_2 in y2:
-        molweight_2 = mass_dict['Mg']+mass_dict['O']
-        return(molweight_2)'''
+    return(molweight)
 
 
 # define the function that solves mass given volume, molarity and the compound molecular weight
@@ -58,17 +54,34 @@ with open(sys.argv[1], 'r') as fin, open(sys.argv[2], 'w') as fout:
         data = line.strip()
         #   split the line (returns a list for the current line)
         data = data.split('\t')
+        #print(data)
+
+        for item in data:
+            if "?" in item:
+                #print(data)
+# define the elements in the data variable
+                for fields in data:
+                    mass = data[0]
+                    volume = data[1]
+                    molarity = data[2]
+                    element = data[3:]
+                print(molarity)
+
+                test = calc_mol_weight(element)
+                #print(test)
+
+
+
+
         #   Sanity check:
         #   if the length of the each line from the input file is not an even number:
         #     return an error message and stop the script
         #     else proceed with the script
 
-        for line in data:
-            if len(data) % 2 == 0:
-                sys.exit(1)
-            else:
-                pass
 
+
+
+''''
             #   select only those lines that contain a question mark (i.e. lines needed to solve the problem)
             if "?" in line:
                 data = data
@@ -93,7 +106,7 @@ with open(sys.argv[1], 'r') as fin, open(sys.argv[2], 'w') as fout:
                         element_2 = y2[3:]
                     #test_2 = calc_mol_weight(element_2)
                     #print (test_2)
-                '''elif data [2] == "?":
+                elif data [2] == "?":
                     y3 = data
                     for fields in y3:
                         mass_3 = y3[0]
