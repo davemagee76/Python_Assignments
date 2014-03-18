@@ -29,20 +29,52 @@ if len(sys.argv) != 3:
 mass_dict = {'H': 1, 'Cl': 35, 'Na': 23, 'C': 12, 'O': 16, 'S': 32, 'Mg': 24, 'Ca': 40, 'Ag': 108, 'N': 14}
 
 
-# define the function that calculates the molecular weight of the compounds in the list given
+# define a function that calculates the molecular weight of the compounds in the list given
 # the list of atoms, their respective number of atoms in the compound and their respective molecular weights
+# for this, will generate a dictionary from the list of elements defined below in the code
+
+# For each element pair in the ion list, place the first element (ion ID) as the key and the second element
+# (ion molecular weight)as the value
 
 
-def calc_mol_weight (a):
-    for field in element:
-        molweight = mass_dict['Na']+mass_dict['Cl']
-    return(molweight)
+# Define a function that generates a new dictionary (called mol_dict) from the lists in the ions variable
+def generate_mol_dict(ions):
+    mol_dict = {}
+# each list in the ions variable consists of pairs of elements (ion ID; ion mol weight)
+# each list in ions has a length of even number
+# divide the range of the length of each list by 2, so that the loop will perform the function for each pair
+# i refers to the indices in the lists of the ions variable
+# loop through each list in the ions variable; for each pair of elements assign the first element to a variable called
+# 'key' and the second variable called 'value'
+# return the mol_dict
+# This will generate (dynamically) a new dictionary called mol_dict from the list of elements in the ions variable
+    for i in range(len(ions)//2):
+        key = ions[2 * i]
+        value = ions[2 * i + 1]
+        mol_dict[key] = int(value) # assign to each key the corresponding molecular weight (convert to an integer)
+    return mol_dict
 
 
-# define the function that solves mass given volume, molarity and the compound molecular weight
-#def calc_mass(volume, molarity, elements):
-#   mass equals volume*molarity*sum(molecular weight*no. of atoms) for each element in compound
+# Define a function that calculates the molecular weight of each molecule in the mol_dict dictionary
+# This dictionary will call the keys and values assigned in the mass_dict dictionary
+def calc_compound_mol_weight(mol_dict):
+    mol_weight = 0 # before adding to the mol_weight variable, initialise it to zero
+    for ion in list(mol_dict.keys()): # convert the dictionary keys to a list. list(dict.keys()) is a python function
+        mol_weight += int(mol_dict[ion]) * int(mass_dict[ion]) # sum
+        #print(int(mol_dict[ion])) # the integer values from the mol_dict dictionary (i.e. no. of ions)
+        #print(int(mass_dict[ion])) # the integer values from the mass_dict dictionary (i.e. mol weight of each ion)
+    return (mol_weight)
+
+
+# Define a function that solves mass given volume, molarity and the compound molecular weight
+#  mass equals volume*molarity*sum(molecular weight*no. of atoms) for each element in compound
 # mass = volume*molarity*()
+
+
+#def calc_mass(volume, molarity, ions):
+#    for line in y1:
+#       mass = ((volume/1000)*(molarity)*(calc_mol_weight))
+
 
 
 # Process the input file to perform the calculations:
@@ -56,27 +88,32 @@ with open(sys.argv[1], 'r') as fin, open(sys.argv[2], 'w') as fout:
         data = data.split('\t')
         #print(data)
 
-        for item in data:
-            if "?" in item:
-                #print(data)
-# define the elements in the data variable
-                for fields in data:
-                    mass = data[0]
-                    volume = data[1]
-                    molarity = data[2]
-                    element = data[3:]
-                print(molarity)
-
-                test = calc_mol_weight(element)
-                #print(test)
+ #   Sanity check:
+            #   if the length of the each line from the input file is not an even number:
+            #     return an error message and stop the script
+            #     else proceed with the script
 
 
 
+        if "?" in data:
+            #print(data)
+            # define the elements in the data variable
+            mass = data[0]
+            volume = data[1]
+            molarity = data[2]
+            ions = data[3:]
+            print(ions)
 
-        #   Sanity check:
-        #   if the length of the each line from the input file is not an even number:
-        #     return an error message and stop the script
-        #     else proceed with the script
+            mol_dict = generate_mol_dict(ions)
+            print(mol_dict)
+
+            compound_mol_weight = calc_compound_mol_weight(mol_dict)
+            print(compound_mol_weight)
+
+
+
+
+
 
 
 
